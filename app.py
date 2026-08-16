@@ -27,7 +27,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # --- Session & Cookie Configuration for Subdomain SSO ---
-# app.config['SESSION_COOKIE_DOMAIN'] = '.resailab.com'    
+# app.config['SESSION_COOKIE_DOMAIN'] = '.example.com'    
 cookie_domain = os.environ.get('COOKIE_DOMAIN')
 if cookie_domain:
     app.config['SESSION_COOKIE_DOMAIN'] = cookie_domain
@@ -190,7 +190,7 @@ def logout():
 def dashboard():
     host_identity = request.host.split(':')[0]
     
-    # Strip "dashboard." from the URL so it becomes just "resailab.com"
+    # Strip "dashboard." from the URL so it becomes just "example.com"
     if host_identity.startswith('dashboard.'):
         base_domain = host_identity.replace('dashboard.', '', 1)
     else:
@@ -472,7 +472,7 @@ with app.app_context():
 
     if not User.query.filter_by(username='admin').first():
         admin_pw = generate_password_hash('admin123')
-        admin = User(username='admin', email='resailab@gmail.com', password_hash=admin_pw, is_admin=True)
+        admin = User(username='admin', email='example@gmail.com', password_hash=admin_pw, is_admin=True)
         db.session.add(admin)
         db.session.commit()
         print("Default admin created: admin / admin123")
