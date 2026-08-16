@@ -47,7 +47,7 @@ Ensure Docker and Docker Compose are installed on your Linux environment, then r
 docker-compose up -d --build
 ```
 **2. Verify Services**
-The Docker Compose file will spin up the `local-proxy`, `flask-dashboard`, `workspace-postgres,` and the associated AI tools within a bridged Docker network.
+The Docker Compose file will spin up the `local-proxy`, `flask-dashboard`, `workspace-postgres`, and the associated AI tools within a bridged Docker network.
 
 **3. Initial Setup**
 Upon the first run, the Flask application context will automatically initialize the PostgreSQL database tables and generate a default admin account.
