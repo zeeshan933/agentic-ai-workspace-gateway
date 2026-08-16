@@ -1,7 +1,7 @@
 # AI Workspace SSO Gateway
 
 ## Overview
-This repository contains the infrastructure and deployment architecture for a multi-tenant AI workspace. It utilizes a centralized Next.js frontend and a Python Flask backend to provide Single Sign-On (SSO) authentication across several containerized AI tools, including Flowise, n8n, and Ollama. 
+This repository contains the infrastructure and deployment architecture for a multi-tenant AI workspace. It utilizes a centralized a Python Flask backend to provide Single Sign-On (SSO) authentication across several containerized AI tools, including Flowise, n8n, and Ollama. 
 
 Traffic is securely routed and authenticated via a custom Nginx reverse proxy using Docker Compose.
 
@@ -21,7 +21,6 @@ Traffic is securely routed and authenticated via a custom Nginx reverse proxy us
 *   **Reverse Proxy & Routing:** Nginx
 *   **Authentication & Dashboard:** Python, Flask, PostgreSQL
 *   **AI Infrastructure:** Flowise (Agent Builder), n8n (Automation), Ollama (Local LLMs)
-*   **Frontend:** Next.js
 *   **Containerization:** Docker, Docker Compose
 
 ## Key Features
@@ -32,9 +31,8 @@ Traffic is securely routed and authenticated via a custom Nginx reverse proxy us
 
 ## Architecture 
 1.  **Nginx (Port 80/443):** Acts as the entry point, handling SSL termination and global HTTP to HTTPS redirection.
-2.  **Next.js App (Port 3000):** Serves the primary frontend interface on the root domain.
-3.  **Flask Dashboard (Port 5000):** Manages user sessions, password resets via SMTP OTPs, and admin controls. Runs via Gunicorn on a lightweight Python 3.12 image.
-4.  **PostgreSQL (Port 5432):** Maintains persistent user data and session configurations on a dedicated Docker volume.
+2.  **Flask Dashboard (Port 5000):** Manages user sessions, password resets via SMTP OTPs, and admin controls. Runs via Gunicorn on a lightweight Python 3.12 image.
+3.  **PostgreSQL (Port 5432):** Maintains persistent user data and session configurations on a dedicated Docker volume.
 
 ## Deployment
 
