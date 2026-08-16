@@ -1,0 +1,135 @@
+services:
+# 1. THE GATEWAY
+  nginx:
+    image: nginx:alpine
+    container_name: local-proxy
+    restart: always
+    ports:
+      - "80:80"     # Standard HTTP
+      - "443:443"   # Standard HTTPS
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro  # SSL certificates folder
+    networks:
+      - default
+      - docker_default
+    depends_on:
+      - flask-dashboard
+      - flowise
+      - n8n
+      - ollama
+
+  # 2. FLASK DASHBOARD
+  flask-dashboard:
+    image: my-flask-app:latest
+    container_name: flask-dashboard
+    restart: always
+    env_file:
+      - .env  # Tells Docker to load your secrets here!
+    depends_on:
+      - postgres
+
+  # 3. DATABASE
+  postgres:
+    image: postgres:15
+    container_name: workspace-postgres
+    restart: always
+    environment:
+      # You can also move these to your .env file for extra security
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=namedb
+      - POSTGRES_DB=workspacedb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    networks:
+      - default
+
+  flowise:
+    image: flowiseai/flowise:latest
+    container_name: flowise
+    restart: always
+    expose:
+      - "3000"
+    volumes:
+      - ~/.flowise:/root/.flowise
+    environment:
+      # Core Setup
+      - PORT=3000
+      - NODE_ENV=production
+      - APP_URL=https://flowise.example.com
+      # Unlocks built-in and external JS modules inside Custom JS Tools
+      - TOOL_FUNCTION_BUILTIN_DEP=*
+      - TOOL_FUNCTION_EXTERNAL_DEP=*
+      
+      # SMTP Email Setup for Invitations & Password Resets
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587                    # Changed from 465
+      - SMTP_USER=muhammadzeeshan20019337426@gmail.com
+      - SMTP_PASSWORD=pzdkwuemwlowtkij
+      - SENDER_EMAIL=muhammadzeeshan20019337426@gmail.com
+      - SMTP_SECURE=false                # Changed from true
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    user: "root"
+    restart: always
+    expose:
+      - "5678"
+    volumes:
+      - ~/.n8n:/home/node/.n8n
+    environment:
+      # Core Setup
+      - N8N_HOST=workflow.example.com
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://workflow.example.com/
+      - NODE_ENV=production
+      - GENERIC_TIMEZONE=Asia/Karachi
+      
+      # Unlocks JavaScript built-in and external modules
+      - NODE_FUNCTION_ALLOW_BUILTIN=*
+      - NODE_FUNCTION_ALLOW_EXTERNAL=*
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      
+      # SMTP Email Setup for Invitations
+      - N8N_EMAIL_MODE=smtp
+      - N8N_SMTP_HOST=smtp.gmail.com
+      - N8N_SMTP_PORT=465
+      - N8N_SMTP_USER=muhammadzeeshan20019337426@gmail.com
+      - N8N_SMTP_PASS=pzdk wuem wlow tkij
+      - N8N_SMTP_SENDER=muhammadzeeshan20019337426@gmail.com
+      - N8N_SMTP_SSL=true
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: always
+    volumes:
+      - ollama_data:/root/.ollama
+
+  # 5. CLOUDFLARE TUNNEL (NOW INSIDE THE NETWORK!)
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflare-tunnel
+    restart: always
+    command: tunnel run
+    environment:
+      # PASTE YOUR CLOUDFLARE TOKEN BELOW (Keep the TUNNEL_TOKEN= part)
+      - TUNNEL_TOKEN=eyJhIjoiNjBmZWReyJhIjoiNjZmMDZiZGQzZGE4ZWVjZmVhMGQwNTAxZjA1MmFkOGIiLCJ0IjoiZWVlMDVmNDgtNGJlNi00MzBjLTlhMzgtNWY1OGYzMGY3ZGIxIiwicyI6IlpqazBNbVppTjJRdE1URXdOaTAwT1RjNUxXSmlNRGt0TlRGa1kyUTVaR1V6T0RObCJ9mZWMwNmJkNzNhNGNlM2E5MTQ0OGNjMGQyNDQiLCJ0IjoiMzBjZWRiZTItODY5Zi00N2FhLTg4YTItNWNiY2RiODIyNjlmIiwicyI6Ik1HVmpOalpoWkRBdE4yUXhZUzAwWmpGbUxXRXlPVGd0Tm1Zek1XSTJNREJqWVRnNCJ9
+    networks:
+      - default
+      - docker_default
+
+volumes:
+  ollama_data:
+  postgres_data: # Added persistent volume for Postgres
+
+# Define the external network
+networks:
+  default:
+    driver: bridge
+  docker_default:
+    external: true 

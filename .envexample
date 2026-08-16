@@ -1,0 +1,11 @@
+# Email Configuration
+MAIL_USERNAME="example@gmail.com"
+MAIL_PASSWORD="0000 0000 0000 0000"
+
+COOKIE_DOMAIN=.example.com
+
+# Security Key (Change this to a random long string for production)
+SECRET_KEY="strong key"
+
+# Database Configuration (Make sure this matches your Postgres setup)
+DATABASE_URL="postgresql://postgres:namedb@postgres:5432/workspacedb"

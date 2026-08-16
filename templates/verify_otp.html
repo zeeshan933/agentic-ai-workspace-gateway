@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card glass-card w-100 mx-auto" style="max-width: 450px;">
+    <div class="card-body p-5 text-center">
+        <h3 class="fw-bolder text-white mb-2" style="letter-spacing: -0.5px;">Verify OTP</h3>
+        <p class="text-glass-muted small mb-4">Please enter the 6-digit code sent to your email.</p>
+        
+        <form method="POST">
+            <div class="mb-4">
+                <!-- Large, centered input for OTP -->
+                <input type="text" name="otp" class="form-control glass-input text-center fw-bold py-3 shadow-none" style="font-size: 1.5rem; letter-spacing: 4px;" placeholder="------" maxlength="6" required autofocus>
+            </div>
+            <button type="submit" class="btn glass-btn btn-success-gradient w-100 py-3 fw-bold">Verify Code</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

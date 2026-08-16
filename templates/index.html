@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Glassmorphism Styling for the Workspace Card */
+    .workspace-card {
+        background: rgba(20, 25, 35, 0.4) !important; 
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 20px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    .workspace-btn {
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        border-radius: 12px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        overflow: hidden; /* Keeps the square flex sections inside the rounded corners */
+    }
+
+    .workspace-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        filter: brightness(1.1);
+    }
+
+    .btn-flowise {
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+        color: #ffffff !important;
+    }
+
+    .btn-n8n {
+        background: linear-gradient(135deg, #f04444 0%, #d93025 100%) !important;
+        color: #ffffff !important;
+    }
+    
+    /* Ollama Dynamic Button Colors */
+    .ollama-status-green { background: #10b981; }
+    .ollama-status-red { background: #ef4444; }
+
+    /* Refresh Button Hover Animation */
+    .refresh-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+        transition: all 0.4s ease;
+    }
+    
+    .refresh-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        transform: rotate(180deg);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="card workspace-card text-center p-5 w-100 mx-auto" style="max-width: 700px;">
+    <div class="card-body p-0">
+        
+        <div class="mb-5 position-relative">
+        
+            <h2 class="card-title fw-bolder text-white mb-3" style="letter-spacing: -0.5px; padding: 0 40px;">Available Workspaces</h2>
+            <p class="mb-0" style="color: #cbd5e1; font-size: 1.1rem;">
+                Select a module below to launch your environment.<br>
+                Traffic is securely routed via Nginx.
+            </p>
+        </div>
+        
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <a href="https://flowise.{{ domain_suffix }}" target="_blank" class="btn workspace-btn btn-flowise w-100 py-3 fw-semibold border-0">
+                    Launch Flowise
+                </a>
+            </div>
+            
+            <div class="col-12 col-md-6">
+                <a href="https://workflow.{{ domain_suffix }}" target="_blank" class="btn workspace-btn btn-n8n w-100 py-3 fw-semibold border-0">
+                    Launch n8n
+                </a>
+            </div>
+            
+            <div class="col-12">
+                <a href="https://ollama.{{ domain_suffix }}" target="_blank" class="btn workspace-btn w-100 p-0 fw-bold border-0" style="min-height: 54px;">
+                    
+                    <div style="width: 90%; background-color: #f8f9fa; color: #212529; height: 100%; min-height: 54px; display: flex; align-items: center; justify-content: center;">
+                        Launch Ollama
+                    </div>
+                    
+                    <div class="{% if ollama_status %}ollama-status-green{% else %}ollama-status-red{% endif %}" 
+                         style="width: 10%; height: 100%; min-height: 54px; display: flex; align-items: center; justify-content: center; color: white;">
+                        
+                        {% if ollama_status %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        {% endif %}
+                        
+                    </div>
+                    
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

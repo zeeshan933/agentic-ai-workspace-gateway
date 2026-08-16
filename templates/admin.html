@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Orange/Warning Gradient for Bulk Upload Button */
+    .btn-warning-gradient {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+        color: #ffffff !important;
+    }
+    
+    /* Fix for Glass File Input 'Choose File' button */
+    .glass-input[type="file"]::file-selector-button {
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+        border: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        margin-right: 15px;
+        padding: 0.375rem 1rem;
+        transition: all 0.2s ease;
+    }
+    .glass-input[type="file"]::file-selector-button:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+</style>
+
+<div class="w-100 mx-auto" style="max-width: 800px;">
+    
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bolder text-white mb-0" style="letter-spacing: -0.5px;">Admin Controls</h2>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('manage_users') }}" class="btn glass-btn btn-primary-gradient btn-sm px-3 py-2 fw-semibold">Manage All Users</a>
+            <a href="{{ url_for('dashboard') }}" class="btn glass-btn btn-secondary-glass btn-sm px-3 py-2 fw-semibold">Back to Workspace</a>
+        </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="row g-4">
+        
+        <!-- Add Single User Card -->
+        <div class="col-md-6">
+            <div class="card glass-card h-100">
+                <div class="card-body p-4 p-sm-5">
+                    <h5 class="card-title fw-bold text-white mb-4 pb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">Add Single User</h5>
+                    
+                    <form method="POST" action="{{ url_for('admin_panel') }}">
+                        <input type="hidden" name="signup" value="1">
+                        <div class="mb-3">
+                            <label class="form-label text-glass-muted small fw-semibold mb-2">Username</label>
+                            <input type="text" name="username" class="form-control glass-input py-2 shadow-none" placeholder="Username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-glass-muted small fw-semibold mb-2">Email</label>
+                            <input type="email" name="email" class="form-control glass-input py-2 shadow-none" placeholder="Email Address" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-glass-muted small fw-semibold mb-2">Password</label>
+                            <input type="password" name="password" class="form-control glass-input py-2 shadow-none" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="btn glass-btn btn-success-gradient w-100 py-2 fw-bold mt-2">Create User</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Import Card -->
+        <div class="col-md-6">
+            <div class="card glass-card h-100">
+                <div class="card-body p-4 p-sm-5 d-flex flex-column">
+                    <h5 class="card-title fw-bold text-white mb-4 pb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">Bulk Import (.xlsx)</h5>
+                    
+                    <div class="mb-4 flex-grow-1">
+                        <p class="text-glass-muted small mb-2" style="line-height: 1.6;">
+                            Format: <span class="text-white">Column A</span> = Username, <span class="text-white">Column B</span> = Email.<br>
+                            Passwords default to hashed usernames.
+                        </p>
+                        <!-- Stylized alert box for limits -->
+                        <div class="p-3 mt-3 rounded" style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b;">
+                            <small class="text-white">
+                                <strong>Limit:</strong> 50 users per upload.<br>
+                                <strong>Cooldown:</strong> 1 hour.
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('upload_users') }}" enctype="multipart/form-data" class="mt-auto">
+                        <div class="mb-4">
+                            <label class="form-label text-glass-muted small fw-semibold mb-2">Select Excel File</label>
+                            <input class="form-control glass-input shadow-none" type="file" name="file" accept=".xlsx" required>
+                        </div>
+                        <button type="submit" class="btn glass-btn btn-warning-gradient w-100 py-2 fw-bold">Upload and Import</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

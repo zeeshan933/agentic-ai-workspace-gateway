@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card glass-card w-100 mx-auto" style="max-width: 400px;">
+    <div class="card-body p-4 p-sm-5">
+        
+        <div class="d-flex flex-column align-items-center mb-4 pb-2">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" 
+                 alt="Workspace Logo" 
+                 class="mb-3" 
+                 style="width: 80px; height: 80px; border-radius: 18px; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+            <h3 class="fw-bolder text-white mb-0" style="letter-spacing: -0.5px;">Secure Login</h3>
+        </div>
+        
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label text-glass-muted small fw-semibold mb-2">Username</label>
+                <input type="text" name="username" class="form-control glass-input py-2 shadow-none" required autofocus>
+            </div>
+            <div class="mb-4">
+                <label class="form-label text-glass-muted small fw-semibold mb-2">Password</label>
+                <input type="password" name="password" class="form-control glass-input py-2 shadow-none" required>
+            </div>
+            <button type="submit" class="btn glass-btn btn-primary-gradient w-100 py-3 fw-bold">Sign In</button>
+        </form>
+        
+        <div class="text-center mt-4 pt-2">
+            <a href="{{ url_for('forgot_password') }}" class="text-decoration-none small" style="color: #818cf8; transition: color 0.2s;">Forgot Password?</a>
+        </div>
+
+        <div id="rescue-banner" style="display: none; margin-top: 25px; padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 12px; text-align: center;">
+            <p style="color: #ffda6a; font-size: 0.85rem; margin-bottom: 10px;">Looking for the main Agents Hub?</p>
+            <a href="https://resailab.com/?v=clear" 
+               style="display: block; padding: 8px; background: rgba(255, 193, 7, 0.2); color: #ffda6a; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 0.9rem; transition: background 0.3s;">
+                Return to resailab.com
+            </a>
+        </div>
+
+        <script>
+            // This script checks if the user arrived from the main domain.
+            // If they did, it unhides the rescue banner.
+            if (document.referrer.includes("resailab.com")) {
+                document.getElementById("rescue-banner").style.display = "block";
+            }
+        </script>
+        </div>
+</div>
+{% endblock %}
